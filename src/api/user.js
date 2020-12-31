@@ -1,0 +1,58 @@
+/**
+ * 用户相关请求模块
+ */
+import request from '@/utils/request'
+
+// 用户登录（data是调用login方法时传入的值）
+export const login = data => {
+  return request({
+    method: 'POST',
+    url: '/user/login',
+    // data 用来设置 POST 请求体
+    // data: data 两者相同可以简写为下面的形式
+    data
+  })
+}
+
+// 获取用户信息
+export const getUserProfile = () => {
+  // const user = JSON.parse(window.localStorage.getItem('user'))
+
+  return request({
+    method: 'GET',
+    url: '/user/profile'
+    // 后端要求把需要授权的用户身份放到请求头中(在请求拦截器中统一设置)
+    // axios 可以通过 headers 选项设置请求头
+    // headers: {
+    //   // 属性名和值都得看接口的要求
+    //   // 属性名：Authorization，接口要求的
+    //   // 属性值：Bearer空格token数据
+    //   // Bearer 就是持票人的意思，就好比你的学生证上写了学生证三个字
+    //   Authorization: `Bearer ${user.token}`
+    // }
+  })
+}
+
+// 修改用户信息
+// export const updateUser = () => {
+
+// }
+
+// 修改用户头像
+// 注意：data 必须传递 FormData 对象
+export const updateUserPhoto = data => {
+  return request({
+    method: 'PATCH',
+    url: '/user/photo',
+    data
+  })
+}
+
+// 修改用户基本信息
+export const updateUserProfile = data => {
+  return request({
+    method: 'PATCH',
+    url: '/user/profile',
+    data
+  })
+}
