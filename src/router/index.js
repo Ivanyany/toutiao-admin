@@ -79,6 +79,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
+  mode: 'history', // 去掉路由中的#
   routes
 })
 

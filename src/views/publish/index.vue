@@ -21,9 +21,10 @@
         <el-form-item label="内容" prop="content">
           <!-- <el-input type="textarea" v-model="article.content"></el-input> -->
           <el-tiptap
+            lang="zh"
             v-model="article.content"
             :extensions="extensions"
-            height="350"
+            height="380"
             placeholder="请输入文章内容"
           ></el-tiptap>
         </el-form-item>
@@ -68,8 +69,8 @@
             /> -->
           </template>
         </el-form-item>
-        <el-form-item label="频道" prop="channel_id">
-          <el-select v-model="article.channel_id" placeholder="请选择频道">
+        <el-form-item label="频道" prop="channelId">
+          <el-select v-model="article.channelId" placeholder="请选择频道">
             <el-option
               :label="channel.name"
               :value="channel.id"
@@ -134,10 +135,10 @@ export default {
         title: '', // 文章标题
         content: '', // 文章内容
         cover: { // 文章封面
-          type: 1, // 封面类型 -1:自动，0-无图，1-1张，3-3张
+          type: 0, // 封面类型 -1:自动，0-无图，1-1张，3-3张
           images: [] // 封面图片的地址
         },
-        channel_id: null
+        channelId: null
       },
       // 编辑器的 extensions
       // 它们将会按照你声明的顺序被添加到菜单栏和气泡菜单中
@@ -157,7 +158,7 @@ export default {
             // 为什么？因为 axios 本身就是返回 Promise 对象
             return uploadImage(fd).then(res => {
               // 这个 return 是返回最后的结果
-              return res.data.data.url
+              return res.data.data
             })
           } // 图片的上传方法，返回一个 Promise<url>
         }),
@@ -170,10 +171,10 @@ export default {
         new OrderedList(), // 有序列表
         new TodoItem(),
         new TodoList(),
-        new Fullscreen(),
-        new Preview(),
         new CodeBlock(),
-        new TextColor()
+        new TextColor(),
+        new Fullscreen(),
+        new Preview()
       ],
       formRules: {
         title: [
@@ -184,7 +185,6 @@ export default {
           // { required: true, message: '请输入文章内容', trigger: 'change' }
           {
             validator (rule, value, callback) {
-              console.log('content validator')
               if (value === '<p></p>') {
                 // 验证失败
                 callback(new Error('请输入文章内容'))
@@ -196,7 +196,7 @@ export default {
           },
           { required: true, message: '请输入文章内容', trigger: 'blur' }
         ],
-        channel_id: [
+        channelId: [
           { required: true, message: '请选择文章频道' }
         ]
       }
@@ -218,7 +218,7 @@ export default {
   methods: {
     loadChannels () {
       getArticleChannels().then(res => {
-        this.channels = res.data.data.channels
+        this.channels = res.data.data
       })
     },
 
@@ -237,8 +237,9 @@ export default {
         const articleId = this.$route.query.id
         if (articleId) {
           // 执行修改操作
-          updateArticle(articleId, this.article, draft).then(res => {
-            console.log(res)
+          updateArticle(this.article, draft).then(res => {
+            // 处理响应结果
+            // console.log(res)
             this.$message({
               message: `${draft ? '存入草稿' : '发布'}成功`,
               type: 'success'
@@ -263,7 +264,6 @@ export default {
 
     // 修改文章：加载文章内容
     loadArticle () {
-      console.log('loadArticle')
       // 找到数据接口
       // 封装请求方法
       // 请求获取数据

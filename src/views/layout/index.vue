@@ -108,10 +108,10 @@ export default {
         // 跳转到登录页面
         this.$router.push('/login')
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消退出'
-        })
+        // this.$message({
+        //   type: 'info',
+        //   message: '已取消退出'
+        // })
       })
     }
   }

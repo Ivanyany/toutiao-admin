@@ -26,27 +26,25 @@
         >
         </el-table-column>
         <el-table-column
-          prop="total_comment_count"
+          prop="totalCommentCount"
           label="总评论数"
         >
         </el-table-column>
         <el-table-column
-          prop="fans_comment_count"
+          prop="fansCommentCount"
           label="粉丝评论数">
         </el-table-column>
         <el-table-column
-          prop="address"
           label="评论状态">
           <template slot-scope="scope">
-            {{ scope.row.comment_status ? '正常' : '关闭' }}
+            {{ scope.row.commentStatus ? '正常' : '关闭' }}
           </template>
         </el-table-column>
         <el-table-column
-          prop="address"
           label="操作">
           <template slot-scope="scope">
             <el-switch
-              v-model="scope.row.comment_status"
+              v-model="scope.row.commentStatus"
               active-color="#13ce66"
               inactive-color="#ff4949"
               :disabled="scope.row.statusDisabled"
@@ -112,16 +110,15 @@ export default {
       // 让分页组件激活的页码和请求数据的页码保持一致
       this.page = page
       getArticles({
-        response_type: 'comment',
         page,
-        per_page: this.pageSize
+        pageSize: this.pageSize
       }).then(res => {
         const { results } = res.data.data
         results.forEach(article => {
           article.statusDisabled = false
         })
         this.articles = results
-        this.totalCount = res.data.data.total_count
+        this.totalCount = res.data.data.totalCount
       })
     },
 
@@ -129,13 +126,15 @@ export default {
       // 禁用开关
       article.statusDisabled = true
 
+      console.log(article)
+
       // 请求提交修改
-      updateCommentStatus(article.id.toString(), article.comment_status).then(res => {
+      updateCommentStatus(article.id.toString(), article.commentStatus).then(res => {
         // 启用开关
         article.statusDisabled = false
         this.$message({
           type: 'success',
-          message: article.comment_status ? '开启文章评论状态' : '关闭文章评论状态'
+          message: article.commentStatus ? '开启文章评论状态' : '关闭文章评论状态'
         })
       })
     }

@@ -10,7 +10,7 @@
         <!-- /面包屑路径导航 -->
       </div>
       <!-- 数据筛选表单 -->
-      <el-form ref="form" :model="form" label-width="40px" size="mini">
+      <el-form label-width="40px" size="mini">
         <el-form-item label="状态">
           <el-radio-group v-model="status">
             <!--
@@ -39,7 +39,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="日期">
-          <el-date-picker
+          <!-- <el-date-picker
             v-model="rangeDate"
             type="datetimerange"
             start-placeholder="开始日期"
@@ -47,7 +47,16 @@
             :default-time="['12:00:00']"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
-          />
+          /> -->
+          <el-date-picker
+            v-model="rangeDate"
+            type="daterange"
+            range-separator="-"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd">
+          </el-date-picker>
         </el-form-item>
         <el-form-item>
           <!--
@@ -89,9 +98,14 @@
         v-loading="loading"
       >
         <el-table-column
-          prop="date"
+          prop="cover"
           label="封面">
+          <!-- 有template时，prop属性就会自动失效，从而使用template -->
           <template slot-scope="scope">
+            <!--
+              fit 填充样式
+              lazy 懒加载
+            -->
             <el-image
               style="width: 50px; height: 50px"
               :src="scope.row.cover.images[0]"
@@ -123,7 +137,9 @@
           label="标题">
         </el-table-column>
         <el-table-column
+          prop="status"
           label="状态">
+          <!-- 有template时，prop属性就会自动失效，从而使用template -->
           <!-- 如果需要在自定义列模板中获取当前遍历项数据，那么就在 template 上声明 slot-scope="scope" -->
           <template slot-scope="scope">
             <el-tag :type="articleStatus[scope.row.status].type">{{ articleStatus[scope.row.status].text }}</el-tag>
@@ -135,8 +151,8 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="pubdate"
-          label="发布时间">
+          prop="updateDate"
+          label="最新操作时间">
         </el-table-column>
         <el-table-column
           label="操作">
@@ -166,8 +182,6 @@
         total 用来设定总数据的条数
         它默认按照 10 条每页计算总页码
         page-size 每页显示条目个数，支持 .sync 修饰符，默认每页 10 条
-
-        90 3 90 / 3 = 30
        -->
       <el-pagination
         layout="prev, pager, next"
@@ -196,18 +210,8 @@ export default {
   props: {},
   data () {
     return {
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
       articles: [], // 文章数据列表
-      articleStatus: [
+      articleStatus: [ // 文章状态
         { status: 0, text: '草稿', type: 'info' }, // 0
         { status: 1, text: '待审核', type: '' }, // 1
         { status: 2, text: '审核通过', type: 'success' }, // 2
@@ -215,35 +219,39 @@ export default {
         { status: 4, text: '已删除', type: 'danger' } // 4
       ],
       totalCount: 0, // 总数据条数
+      page: 1, // 当前页码
       pageSize: 10, // 每页大小
       status: null, // 查询文章的状态，不传就是全部
       channels: [], // 文章频道列表
       channelId: null, // 查询文章的频道
       rangeDate: null, // 筛选的范围日期
-      loading: true, // 表单数据加载中 loading
-      page: 1 // 当前页码
+      loading: true // 表单数据加载中 loading
     }
   },
   computed: {},
   watch: {},
   created () {
+    // 加载文章频道下拉列表
     this.loadChannels()
+    // 加载文章列表
     this.loadArticles(1)
   },
   mounted () {},
   methods: {
+    // 加载文章列表
     loadArticles (page = 1) {
       // 展示加载中 loading
       this.loading = true
+      // 查询文章列表
       getArticles({
         page,
-        per_page: this.pageSize,
+        pageSize: this.pageSize,
         status: this.status,
-        channel_id: this.channelId,
-        begin_pubdate: this.rangeDate ? this.rangeDate[0] : null, // 开始日期
-        end_pubdate: this.rangeDate ? this.rangeDate[1] : null // 截止日期
+        channelId: this.channelId,
+        beginDate: this.rangeDate ? this.rangeDate[0] : null, // 开始日期
+        endDate: this.rangeDate ? this.rangeDate[1] : null // 截止日期
       }).then(res => {
-        const { results, total_count: totalCount } = res.data.data
+        const { results, totalCount } = res.data.data
         this.articles = results
         this.totalCount = totalCount
 
@@ -252,23 +260,23 @@ export default {
       })
     },
 
-    onSubmit () {
-      console.log('submit!')
-    },
-
+    // 分页改变时查询文章列表
     onCurrentChange (page) {
       this.loadArticles(page)
     },
 
+    // 加载文章频道列表
     loadChannels () {
+      // 查询文章频道列表
       getArticleChannels().then(res => {
-        this.channels = res.data.data.channels
+        this.channels = res.data.data
       })
     },
 
+    // 删除文章
     onDeleteArticle (articleId) {
-      console.log(articleId)
-      console.log(articleId.toString())
+      console.log(articleId) // 数字大小超出了js表示的范围
+      console.log(articleId.toString()) // 在处理后端返回的数据时使用了JSONbig来转换数据，所以现在需要使用toString()获取原始数据
       this.$confirm('确认删除吗？', '删除提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -280,10 +288,10 @@ export default {
           this.loadArticles(this.page)
         })
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
+        // this.$message({
+        //   type: 'info',
+        //   message: '已取消删除'
+        // })
       })
       // 找到数据接口
       // 封装请求方法

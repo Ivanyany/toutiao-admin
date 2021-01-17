@@ -6,13 +6,15 @@ import request from '@/utils/request'
 /**
  * 获取文章列表
  */
+// export const getArticles = (params) => { // 可以简写为下一行
 export const getArticles = params => {
   return request({
     method: 'GET',
-    url: '/mp/v1_0/articles',
+    url: '/article/getArticles',
     // Body 参数使用 data 设置
     // Query 参数使用 params 设置
     // Headers 参数使用 headers 设置
+    // params: params // 两者相同时可省略后者
     params
   })
 }
@@ -23,7 +25,7 @@ export const getArticles = params => {
 export const getArticleChannels = () => {
   return request({
     method: 'GET',
-    url: '/mp/v1_0/channels'
+    url: '/channel/getChannels'
   })
 }
 
@@ -35,7 +37,7 @@ export const deleteArticle = articleId => {
     method: 'DELETE',
     // 接口文档中的写的路径参数需要在 url 中传递
     // 凡是看见接口路径中有的 :xxx 格式的字段，则需要传递路径参数
-    url: `/mp/v1_0/articles/${articleId}`
+    url: `/article/deleteArticle/${articleId}`
   })
 }
 
@@ -45,21 +47,7 @@ export const deleteArticle = articleId => {
 export const addArticle = (data, draft = false) => {
   return request({
     method: 'POST',
-    url: '/mp/v1_0/articles',
-    params: {
-      draft // 是否存为草稿（true 为草稿）
-    },
-    data
-  })
-}
-
-/**
- * 编辑文章
- */
-export const updateArticle = (articleId, data, draft = false) => {
-  return request({
-    method: 'PUT',
-    url: `/mp/v1_0/articles/${articleId}`,
+    url: '/article/addArticle',
     params: {
       draft // 是否存为草稿（true 为草稿）
     },
@@ -73,7 +61,21 @@ export const updateArticle = (articleId, data, draft = false) => {
 export const getArticle = articleId => {
   return request({
     method: 'GET',
-    url: `/mp/v1_0/articles/${articleId}`
+    url: `/article/getArticleById/${articleId}`
+  })
+}
+
+/**
+ * 编辑文章
+ */
+export const updateArticle = (data, draft = false) => {
+  return request({
+    method: 'PUT',
+    url: '/article/updateArticle',
+    params: {
+      draft // 是否存为草稿（true 为草稿）
+    },
+    data
   })
 }
 
@@ -83,13 +85,10 @@ export const getArticle = articleId => {
 export const updateCommentStatus = (articleId, allowComment) => {
   return request({
     method: 'PUT',
-    url: '/mp/v1_0/comments/status',
+    url: '/article/updateCommentsStatus',
     params: {
-      // 对象的属性名不受代码规范限制
-      article_id: articleId
-    },
-    data: {
-      allow_comment: allowComment
+      articleId,
+      allowComment
     }
   })
 }

@@ -52,7 +52,7 @@
            -->
           <el-button
             type="warning"
-            :icon="img.is_collected ? 'el-icon-star-on' : 'el-icon-star-off'"
+            :icon="img.collected ? 'el-icon-star-on' : 'el-icon-star-off'"
             circle
             size="small"
             @click="onCollect(img)"
@@ -68,8 +68,8 @@
           ></el-button>
           <!-- <i
             :class="{
-              'el-icon-star-on': img.is_collected,
-              'el-icon-star-off': !img.is_collected
+              'el-icon-star-on': img.collected,
+              'el-icon-star-off': !img.collected
             }"
             @click="onCollect(img)"
           ></i> -->
@@ -110,7 +110,7 @@
       <el-upload
         class="upload-demo"
         drag
-        action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
+        action="http://192.168.0.101:8001/image/uploadImage"
         :headers="uploadHeaders"
         name="image"
         multiple
@@ -174,7 +174,8 @@ export default {
       totalCount: 0, // 总数据条数
       pageSize: 20, // 每页大小
       page: 1, // 当前页码
-      selected: null // 选中的索引
+      selected: null, // 选中的索引
+      username: user.username
     }
   },
   computed: {},
@@ -191,7 +192,7 @@ export default {
       getImages({
         collect: this.collect,
         page,
-        per_page: this.pageSize
+        pageSize: this.pageSize
       }).then(res => {
         const results = res.data.data.results
         results.forEach(img => {
@@ -200,13 +201,9 @@ export default {
           img.loading = false
         })
         this.images = results
-        this.totalCount = res.data.data.total_count
+        this.totalCount = res.data.data.totalCount
       })
     },
-
-    // onCollectChange () {
-    //   this.loadImages(1)
-    // },
 
     onUploadSuccess () {
       // 关闭对话框
@@ -228,13 +225,13 @@ export default {
     onCollect (img) {
       // 展示 loading
       img.loading = true
-      collectImage(img.id, !img.is_collected).then(res => {
+      collectImage(img.id, !img.collected, this.username).then(res => {
         // 更新视图状态
-        img.is_collected = !img.is_collected
+        img.collected = !img.collected
         // 关闭 loading
         img.loading = false
       })
-      // if (img.is_collected) {
+      // if (img.collected) {
       //   // 已收藏，取消收藏
       //   collectImage(img.id, false)
       // } else {
