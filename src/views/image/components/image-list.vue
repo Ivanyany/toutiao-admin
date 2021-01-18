@@ -34,7 +34,7 @@
       >
         <el-image
           style="height: 100px"
-          :src="img.url"
+          :src="img.imgUrl"
           fit="cover"
         ></el-image>
         <div
@@ -52,7 +52,7 @@
            -->
           <el-button
             type="warning"
-            :icon="img.collected ? 'el-icon-star-on' : 'el-icon-star-off'"
+            :icon="img.collect ? 'el-icon-star-on' : 'el-icon-star-off'"
             circle
             size="small"
             @click="onCollect(img)"
@@ -225,9 +225,9 @@ export default {
     onCollect (img) {
       // 展示 loading
       img.loading = true
-      collectImage(img.id, !img.collected, this.username).then(res => {
+      collectImage(img.id, !img.collect, this.username).then(res => {
         // 更新视图状态
-        img.collected = !img.collected
+        img.collect = !img.collect
         // 关闭 loading
         img.loading = false
       })

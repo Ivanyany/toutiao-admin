@@ -50,6 +50,6 @@ export const collectImage = (imageId, collect, username) => {
 export const deleteImage = imageId => {
   return request({
     method: 'DELETE',
-    url: `/mp/v1_0/user/images/${imageId}`
+    url: `/image/deleteImage/${imageId}`
   })
 }

@@ -11,18 +11,18 @@
       </div>
       <el-row>
         <el-col :span="15">
-          <el-form ref="form" :model="user" label-width="70px">
+          <el-form :model="user" label-width="70px">
             <el-form-item label="编号">
               {{ user.id }}
             </el-form-item>
             <el-form-item label="手机">
               {{ user.mobile }}
             </el-form-item>
-            <el-form-item label="媒体名称">
-              <el-input v-model="user.name"></el-input>
+            <el-form-item label="昵称">
+              <el-input v-model="user.nickname"></el-input>
             </el-form-item>
             <el-form-item label="媒体介绍">
-              <el-input type="textarea" v-model="user.intro"></el-input>
+              <el-input type="textarea" v-model="user.introduce"></el-input>
             </el-form-item>
             <el-form-item label="邮箱">
               <el-input v-model="user.email"></el-input>
@@ -39,7 +39,7 @@
         <el-col :offset="2" :span="4">
 
           <!-- <p @click="$refs.file.click()">点击修改头像</p> -->
-          <label for="file">
+          <label for="file" style="cursor: pointer">
             <el-avatar
               shape="square"
               :size="150"
@@ -102,11 +102,11 @@ export default {
   data () {
     return {
       user: {
-        email: '',
         id: null,
-        intro: '',
         mobile: '',
-        name: '',
+        nickname: '',
+        email: '',
+        introduce: '',
         photo: ''
       }, // 用户资料
       dialogVisible: false, // 控制上传图片裁切预览的显示状态
@@ -129,10 +129,11 @@ export default {
 
       // 开启 loading 状态
       this.updateProfileLoading = true
-      const { name, intro, email } = this.user
+      const { id, nickname, introduce, email } = this.user
       updateUserProfile({
-        name,
-        intro,
+        id,
+        nickname,
+        introduce,
         email
       }).then(res => {
         this.$message({
@@ -155,9 +156,9 @@ export default {
     },
 
     onFileChange () {
-      // 处于图片预览
+      // 处理图片预览
       const file = this.$refs.file
-
+      // 预览图片的地址
       const blobData = window.URL.createObjectURL(file.files[0])
 
       this.previewImage = blobData
@@ -219,7 +220,6 @@ export default {
         fd.append('photo', file)
         // 请求更新用户头像请求提交 fd
         updateUserPhoto(fd).then(res => {
-          console.log(res)
           // 关闭对话框
           this.dialogVisible = false
           // 更新视图展示

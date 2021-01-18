@@ -43,7 +43,7 @@ export const getUserProfile = () => {
 export const updateUserPhoto = data => {
   return request({
     method: 'PATCH',
-    url: '/user/photo',
+    url: '/user/updatePhoto',
     data
   })
 }
@@ -52,7 +52,7 @@ export const updateUserPhoto = data => {
 export const updateUserProfile = data => {
   return request({
     method: 'PATCH',
-    url: '/user/profile',
+    url: '/user/updateProfile',
     data
   })
 }
