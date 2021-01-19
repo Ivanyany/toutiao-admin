@@ -183,6 +183,7 @@ export default {
       //    方式一：裁切器.replace 方法
       //    方式二：销毁裁切器，重新初始化
       // 初始化裁切器
+      // 方式一：裁切器.replace 方法
       if (this.cropper) {
         this.cropper.replace(this.previewImage)
         return
@@ -206,6 +207,7 @@ export default {
       })
     },
 
+    // 方式二：销毁裁切器，重新初始化
     onDialogClosed () {
       // 对话框关闭，销毁裁切器
       // this.cropper.destroy()
@@ -239,7 +241,7 @@ export default {
           globalBus.$emit('update-user', this.user)
 
           // 把服务端返回的图片进行展示有点慢
-          // this.user.photo = res.data.data.photo
+          // this.user.photo = res.data.data
         })
       })
     }
