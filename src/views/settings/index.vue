@@ -237,7 +237,7 @@ export default {
             message: '更新头像成功'
           })
 
-          // 更新顶部登录用户的信息
+          // 更新顶部登录用户的头像信息
           globalBus.$emit('update-user', this.user)
 
           // 把服务端返回的图片进行展示有点慢

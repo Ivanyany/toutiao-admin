@@ -105,11 +105,11 @@ export default {
           // 关闭弹出层
           this.dialogVisible = false
           // 展示上传的图片
-          // this.$refs['cover-image'].src = res.data.data.url
+          // this.$refs['cover-image'].src = res.data.data
 
           // 将图片地址发送给父组件
-          this.$emit('input', res.data.data.url)
-          // this.$emit('update-cover', res.data.data.url)
+          this.$emit('input', res.data.data)
+          // this.$emit('update-cover', res.data.data)
         })
       } else if (this.activeName === 'first') {
         // 还有一种组件通信方式：父组件可以直接访问子组件中的数据

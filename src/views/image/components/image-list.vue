@@ -285,6 +285,7 @@ export default {
   right: 0;
   bottom: 0;
   top: 0;
+  margin-top: -30px;
   display: flex;
   justify-content: center;
   align-items: center;

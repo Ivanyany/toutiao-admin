@@ -33,7 +33,7 @@
             <el-radio :label="1">单图</el-radio>
             <el-radio :label="3">三图</el-radio>
             <el-radio :label="0">无图</el-radio>
-            <el-radio :label="-1">自动</el-radio>
+            <!-- <el-radio :label="-1">自动</el-radio> -->
           </el-radio-group>
           <!--
             我们需要把选择的封面图片的地址放到 article.cover.images 数组中
@@ -203,7 +203,11 @@ export default {
     }
   },
   computed: {},
-  watch: {},
+  watch: { // 监听
+    $route (to, from) { // 路由变化方式，路由发生变化，方法就会执行
+      this.init()
+    }
+  },
   created () {
     this.loadChannels()
 
@@ -216,6 +220,25 @@ export default {
   },
   mounted () {},
   methods: {
+    init () {
+      // 判断路径有id值,做修改
+      if (this.$route.params && this.$route.params.id) {
+        // 调用根据id查询的方法
+        this.loadArticle()
+      } else { // 路径没有id值，做添加
+        // 清空表单
+        this.article = {
+          title: '', // 文章标题
+          content: '', // 文章内容
+          cover: { // 文章封面
+            type: 0, // 封面类型 -1:自动，0-无图，1-1张，3-3张
+            images: [] // 封面图片的地址
+          },
+          channelId: null
+        }
+      }
+    },
+
     loadChannels () {
       getArticleChannels().then(res => {
         this.channels = res.data.data

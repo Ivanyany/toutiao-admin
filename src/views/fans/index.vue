@@ -13,9 +13,11 @@
 
 <script>
 // 2. 加载 echarts
-import echarts from 'echarts'
+// import echarts from 'echarts' // 这种直接引用会报错,用下面这种,或者使用下面的require
+import * as echarts from 'echarts'
 import MapDemo from './components/map-demo'
 import BmapDemo from './components/bmap-demo'
+// var echarts = require('echarts')
 
 export default {
   name: 'FansIndex',
@@ -35,7 +37,7 @@ export default {
     // 3. 基于准备好的dom，初始化echarts实例
     var myChart = echarts.init(this.$refs.main)
 
-    // 指定图表的配置项和数据
+    // 4. 指定图表的配置项和数据
     var option = {
       title: {
         text: 'ECharts 入门示例'
@@ -57,7 +59,7 @@ export default {
       ]
     }
 
-    // 使用刚指定的配置项和数据显示图表。
+    // 5. 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option)
   },
   methods: {}
