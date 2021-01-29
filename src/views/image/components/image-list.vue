@@ -110,7 +110,7 @@
       <el-upload
         class="upload-demo"
         drag
-        action="http://192.168.0.101:8001/image/uploadImage"
+        action="http://47.99.172.18:8001/image/uploadImage"
         :headers="uploadHeaders"
         name="image"
         multiple

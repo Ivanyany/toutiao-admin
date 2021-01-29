@@ -101,7 +101,7 @@ router.beforeEach((to, from, next) => {
 
   // 校验非登录页面的登录状态
   if (to.path !== '/login') {
-    if (user) {
+    if (user && user.token) {
       // 已登录，允许通过
       next()
     } else {

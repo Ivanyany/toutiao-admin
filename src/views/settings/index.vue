@@ -129,12 +129,13 @@ export default {
 
       // 开启 loading 状态
       this.updateProfileLoading = true
-      const { id, nickname, introduce, email } = this.user
+      const { id, nickname, introduce, email, photo } = this.user
       updateUserProfile({
         id,
         nickname,
         introduce,
-        email
+        email,
+        photo
       }).then(res => {
         this.$message({
           type: 'success',
