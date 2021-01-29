@@ -42,7 +42,7 @@ export const getUserProfile = () => {
 // 注意：data 必须传递 FormData 对象
 export const updateUserPhoto = data => {
   return request({
-    method: 'PATCH',
+    method: 'POST',
     url: '/user/updatePhoto',
     data
   })

@@ -172,7 +172,7 @@ export default {
         Authorization: `Bearer ${user.token}`
       },
       totalCount: 0, // 总数据条数
-      pageSize: 20, // 每页大小
+      pageSize: 10, // 每页大小
       page: 1, // 当前页码
       selected: null, // 选中的索引
       username: user.username

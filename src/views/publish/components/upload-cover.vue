@@ -122,7 +122,7 @@ export default {
         // 关闭对话框
         this.dialogVisible = false
         // 修改父组件绑定数据
-        this.$emit('input', imageList.images[selected].url)
+        this.$emit('input', imageList.images[selected].imgUrl)
       }
     }
   }
