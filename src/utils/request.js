@@ -15,8 +15,7 @@ import { Message } from 'element-ui'
 // 创建一个 axios 实例，说白了就是复制了一个 axios
 // 我们通过这个实例去发请求，把需要的配置配置给这个实例来处理
 const request = axios.create({
-  baseURL: 'http://192.168.0.103:8001/', // 请求的基础路径
-  // baseURL: 'http://47.99.172.18:8001/', // 请求的基础路径
+  baseURL: 'http://47.99.172.18:8001/', // 请求的基础路径
 
   // 定义后端返回的原始数据的处理
   // 参数 data 就是后端返回的原始数据（未经处理的 JSON 格式字符串）
